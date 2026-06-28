@@ -1,51 +1,704 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Coming Soon</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PCL Wayfinding Kiosk — Caroline Padon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Commit+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* ── Tokens ──────────────────────────────────────────── */
+    :root {
+      --cream: #f5f2e8;
+      --green: #007618;
+      --green-dim: #005512;
+      --highlight: #d4e44a;
+      --ink: #1a1a1a;
+      --ink-mid: #444;
+      --ink-light: #888;
+      --rule: #d0cdb8;
+      --mono: "Commit Mono", "Courier New", monospace;
+      --max: 860px;
+      --wide: 1100px;
+    }
 
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#fff8e8;
-  color:#3c3b52;
-  font-family: monospace;
-}
+    /* ── Reset ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
 
-pre{
-  font-size:16px;
-  line-height:1.2;
-  text-align:center;
-}
+    body {
+      font-family: var(--mono);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.65;
+    }
 
-.subtitle{
-  margin-top:1rem;
-  font-size:14px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-}
-</style>
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--cream);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      color: var(--ink-mid);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    /* ── Layout helpers ──────────────────────────────────── */
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .container--wide {
+      max-width: var(--wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section { padding: 5rem 0; }
+    section + section { border-top: 1px solid var(--rule); }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.25rem;
+    }
+
+    h2 {
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--ink-mid);
+      max-width: 62ch;
+      margin-bottom: 1rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .hero__meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem 2rem;
+      margin: 2rem 0 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .hero__meta-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .hero__meta-value {
+      font-size: 0.85rem;
+      color: var(--ink);
+    }
+
+    .hero__meta-value a {
+      color: var(--green);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .hero__image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #c8c5b2;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-light);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    .hero__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Highlight span ──────────────────────────────────── */
+    .hl {
+      background: var(--highlight);
+      padding: 0 0.2em;
+    }
+
+    /* ── Problem cards ───────────────────────────────────── */
+    .problem-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .problem-card {
+      padding: 1.5rem;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      background: #efece0;
+    }
+
+    .problem-card h3 {
+      color: var(--green);
+    }
+
+    .problem-card p {
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    /* ── Image grid ──────────────────────────────────────── */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .image-grid--three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .image-grid__item figure {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .image-grid__item .img-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: #c8c5b2;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-light);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+    }
+
+    .image-grid__item figcaption {
+      font-size: 0.75rem;
+      color: var(--ink-light);
+      line-height: 1.4;
+    }
+
+    /* ── Solution row ────────────────────────────────────── */
+    .solution__body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2rem;
+    }
+
+    .solution__body--full { grid-template-columns: 1fr; }
+
+    .solution__text p { max-width: 48ch; }
+
+    .solution__image .img-placeholder {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #c8c5b2;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-light);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Carousel (3-up) ─────────────────────────────────── */
+    .carousel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .carousel .img-placeholder {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #c8c5b2;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-light);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Outcome ─────────────────────────────────────────── */
+    .outcome__award {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      padding: 2rem;
+      border: 2px solid var(--green);
+      border-radius: 4px;
+      margin-top: 2rem;
+      background: #eaf2e0;
+    }
+
+    .outcome__award-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .outcome__award h2 { margin-bottom: 0.25rem; }
+    .outcome__award p { margin: 0; font-size: 0.85rem; }
+
+    .quotes {
+      margin-top: 3rem;
+    }
+
+    .quotes h3 {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .quote-card {
+      padding: 1.5rem;
+      border-left: 3px solid var(--highlight);
+      background: #efece0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .quote-card p {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .quote-card cite {
+      font-size: 0.75rem;
+      color: var(--ink-light);
+      font-style: normal;
+    }
+
+    /* ── CTA footer ──────────────────────────────────────── */
+    .cta {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 5rem 0;
+      text-align: center;
+      border-top: none;
+    }
+
+    .cta h2 {
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta p {
+      color: #aaa;
+      margin: 0 auto 2rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.65rem 1.4rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 3px;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn--primary {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn--primary:hover { background: var(--green-dim); }
+
+    .btn--outline {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid #555;
+    }
+
+    .btn--outline:hover { border-color: var(--cream); }
+
+    /* ── Page footer ─────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid #333;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    footer a {
+      color: #888;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    footer a:hover { color: var(--cream); }
+
+    footer .footer-links { display: flex; gap: 1.5rem; }
+
+    footer .footer-copy {
+      font-size: 0.72rem;
+      color: #666;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .hero__meta { grid-template-columns: 1fr 1fr; }
+      .problem-cards { grid-template-columns: 1fr; }
+      .image-grid { grid-template-columns: 1fr; }
+      .image-grid--three { grid-template-columns: 1fr; }
+      .solution__body { grid-template-columns: 1fr; }
+      .carousel { grid-template-columns: 1fr; }
+      .quote-grid { grid-template-columns: 1fr; }
+      .outcome__award { flex-direction: column; gap: 1rem; }
+      nav { padding: 1rem; }
+      .nav-links { gap: 1rem; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .fade-in {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.45s ease, transform 0.45s ease;
+      }
+      .fade-in.visible {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div>
-<pre>
-   ____ ___  __  __ ___ _   _  ____ 
-  / ___/ _ \|  \/  |_ _| \ | |/ ___|
- | |  | | | | |\/| || ||  \| | |  _ 
- | |__| |_| | |  | || || |\  | |_| |
-  \____\___/|_|  |_|___|_| \_|\____|
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="#">Caroline Padon</a>
+    <ul class="nav-links">
+      <li><a href="#">Work</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
 
-              SOON
-</pre>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Case study</p>
+      <h1>Wayfinding for a building<br>nobody could navigate</h1>
+      <p style="font-size:1.05rem; color: var(--ink-mid); max-width: 54ch;">
+        Students were getting lost on every floor. I led the UX research and kiosk redesign that helped PCL finally make sense.
+      </p>
 
-<div class="subtitle">Project page coming soon</div>
-</div>
+      <div class="hero__meta">
+        <div>
+          <p class="hero__meta-label">Role</p>
+          <p class="hero__meta-value">UX Strategist, Product Owner</p>
+        </div>
+        <div>
+          <p class="hero__meta-label">Organization</p>
+          <p class="hero__meta-value">UT Libraries, The University of Texas at Austin</p>
+        </div>
+        <div>
+          <p class="hero__meta-label">Year</p>
+          <p class="hero__meta-value">2024–2025</p>
+        </div>
+      </div>
+
+      <div class="hero__image">
+        <!-- Replace with real hero image: <img src="..." alt="PCL kiosk in situ" /> -->
+        [ hero image ]
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section>
+    <div class="container fade-in">
+      <p class="eyebrow">The problem</p>
+      <h2>PCL had a directory. Students still couldn't find anything.</h2>
+      <p>
+        Research revealed that the existing wayfinding system — static signage, a legacy kiosk, and an outdated floor map — left students disoriented from the moment they walked in. Three themes surfaced across every session.
+      </p>
+
+      <div class="problem-cards">
+        <div class="problem-card">
+          <h3>Spatial disorientation</h3>
+          <p>Students consistently underestimated floor count and couldn't locate stacks, study rooms, or service desks without asking staff.</p>
+        </div>
+        <div class="problem-card">
+          <h3>Room numbering logic</h3>
+          <p>The numbering system was inconsistent across floors, causing students to abandon self-directed navigation entirely.</p>
+        </div>
+        <div class="problem-card">
+          <h3>Underused zones</h3>
+          <p>Quiet floors and collaborative spaces sat empty while prime real estate on floor 1 was overcrowded — nobody knew about the alternatives.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section>
+    <div class="container fade-in">
+      <p class="eyebrow">Research</p>
+      <h2>Understanding space through the people moving through it</h2>
+      <p>
+        I facilitated user-led tours using Andy Priestner's methodology, asking participants to navigate to a destination while thinking aloud. I coded findings using Kevin Lynch's framework — edges, nodes, and landmarks — to surface the underlying spatial model students actually held.
+      </p>
+      <p>
+        Synthesis workshops brought together library staff, IT, and facilities to align on what the kiosk needed to solve before we touched a single wireframe.
+      </p>
+
+      <div class="image-grid fade-in">
+        <div class="image-grid__item">
+          <figure>
+            <div class="img-placeholder">[ user-led tour photo ]</div>
+            <figcaption>User-led wayfinding tours, Perry-Castañeda Library</figcaption>
+          </figure>
+        </div>
+        <div class="image-grid__item">
+          <figure>
+            <div class="img-placeholder">[ affinity clustering photo ]</div>
+            <figcaption>Affinity clustering from interview notes with cross-functional team</figcaption>
+          </figure>
+        </div>
+        <div class="image-grid__item">
+          <figure>
+            <div class="img-placeholder">[ journey map ]</div>
+            <figcaption>Student journey map — arrival to task completion</figcaption>
+          </figure>
+        </div>
+        <div class="image-grid__item">
+          <figure>
+            <div class="img-placeholder">[ service blueprint ]</div>
+            <figcaption>Service blueprint connecting kiosk touchpoints to backend systems</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution 1 -->
+  <section>
+    <div class="container fade-in">
+      <p class="eyebrow">Solution</p>
+      <h2>A touch-screen kiosk that meets students where they already stand</h2>
+
+      <div class="solution__body">
+        <div class="solution__text">
+          <p>
+            Instead of a static floor map, I designed an interactive touch-screen system surfacing real-time occupancy data from Occuspace alongside room bookings from LibCal. Students see where space is actually available before they climb four flights of stairs.
+          </p>
+          <p>
+            The kiosk interaction model prioritizes two tasks above everything else: <span class="hl">find a place to study</span> and <span class="hl">find a collection or service</span>. Everything else is secondary navigation.
+          </p>
+        </div>
+        <div class="solution__image">
+          <div class="img-placeholder">[ kiosk screen mockup ]</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution 2 — 3-up carousel -->
+  <section>
+    <div class="container fade-in">
+      <h2>Occupancy data that speaks in plain language</h2>
+      <p>
+        Occuspace sensor data is translated into three simple states — quiet, moderate, busy — mapped to color and icon so a glancing student gets the signal immediately. No percentages, no raw numbers.
+      </p>
+
+      <div class="carousel">
+        <div class="img-placeholder">[ quiet floor state ]</div>
+        <div class="img-placeholder">[ moderate floor state ]</div>
+        <div class="img-placeholder">[ busy floor state ]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution 3 -->
+  <section>
+    <div class="container fade-in">
+      <h2>Building a design system the LIT team could actually maintain</h2>
+
+      <div class="solution__body">
+        <div class="solution__image">
+          <div class="img-placeholder">[ design system component sheet ]</div>
+        </div>
+        <div class="solution__text">
+          <p>
+            I served as product owner between the AUX and LIT teams throughout build, writing user stories, defining acceptance criteria, and running sprint reviews. The output wasn't just a kiosk UI — it was a component library and documentation set that let LIT iterate without starting over.
+          </p>
+          <p>
+            Content is managed through Strapi CMS, decoupled from the front-end so library staff can update room names and service descriptions without developer involvement.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outcome -->
+  <section>
+    <div class="container fade-in">
+      <p class="eyebrow">Outcome</p>
+
+      <div class="outcome__award">
+        <div class="outcome__award-icon">★</div>
+        <div>
+          <h2>UXLibs 2026 — Stage 5 UX Maturity</h2>
+          <p>
+            The kiosk project was presented at UXLibs 2026 as evidence of Stage 5 organizational maturity at UT Libraries — a shift from ad-hoc research to embedded, systems-level UX practice integrated across teams and infrastructure.
+          </p>
+        </div>
+      </div>
+
+      <div class="quotes">
+        <h3>What users are saying</h3>
+        <div class="quote-grid">
+          <div class="quote-card">
+            <p>"I've been coming here for three years and I didn't know that floor existed."</p>
+            <cite>— Undergraduate student, wayfinding test session</cite>
+          </div>
+          <div class="quote-card">
+            <p>"It actually shows me where there's space before I go up. That's all I wanted."</p>
+            <cite>— Graduate student, prototype feedback</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <p class="eyebrow" style="color: var(--highlight);">Want to work together?</p>
+      <h2>Let's talk about your project</h2>
+      <p>UX research, information architecture, accessibility, or product ownership — I'm interested in meaningful problems.</p>
+      <div class="cta-buttons">
+        <a class="btn btn--primary" href="mailto:hello@caropadon.com">Send an email</a>
+        <a class="btn btn--outline" href="https://caropadon.com">See more work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <a href="https://caropadon.com">caropadon.com</a>
+    <div class="footer-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">Resume</a>
+    </div>
+    <p class="footer-copy">© 2025 Caroline Padon</p>
+  </footer>
+
+  <script>
+    // Scroll-triggered fade-ins
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
