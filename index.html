@@ -302,7 +302,55 @@ let table = document.querySelector(".table > table:last-child");
 console.log(table.scrollHeight)
 
 tableSide.style.height = (window.innerHeight - 34) + (tableSide.scrollHeight - table.scrollHeight) + "px"
+<canvas id="trail" style="position:fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
 
+<script>
+  const canvas = document.getElementById('trail');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let points = [];
+  window.addEventListener('pointermove', (e) => {
+    points.push({ x: e.clientX, y: e.clientY, life: 1, size: 4 + Math.random() * 4, angle: Math.random() * Math.PI });
+    if (points.length > 24) points.shift();
+  });
+
+  const green = '#39d353';
+
+  function drawStar(cx, cy, size, rotation){
+    const spikes = 5;
+    const outerR = size;
+    const innerR = size / 2.5;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+    ctx.beginPath();
+    for (let i = 0; i < spikes * 2; i++){
+      const r = i % 2 === 0 ? outerR : innerR;
+      const a = (Math.PI / spikes) * i;
+      ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+    }
+    ctx.closePath();
+    ctx.restore();
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    points.forEach((p) => {
+      p.life -= 0.035;
+      if (p.life <= 0) return;
+      ctx.fillStyle = green;
+      ctx.globalAlpha = Math.max(p.life, 0);
+      drawStar(p.x, p.y, p.size, p.angle);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    points = points.filter(p => p.life > 0);
+    requestAnimationFrame(draw);
+  }
+  draw();
 </script>
 </body>
 </html>
