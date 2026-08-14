@@ -36,24 +36,49 @@
       color: var(--ink);
       line-height: 1.65;
     }
-<div id="login">
-  <h2>Enter Password</h2>
-  <input type="password" id="pass">
-  <button onclick="checkPass()">Enter</button>
-</div>
 
-<script>
-function checkPass(){
-  const password = "Marfita"; // change this
-  const input = document.getElementById("pass").value;
+    /* ── Password gate ───────────────────────────────────── */
+    #login {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--cream);
+    }
 
-  if(input === password){
-    document.getElementById("login").style.display = "none";
-    document.getElementById("content").style.display = "block";
-  } else {
-    alert("Nope!");
-  }
-}
+    #login h2 {
+      font-family: var(--mono);
+    }
+
+    #login input {
+      font-family: var(--mono);
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      font-size: 0.9rem;
+    }
+
+    #login button {
+      font-family: var(--mono);
+      padding: 0.5rem 1.2rem;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    #login button:hover { background: var(--green-dim); }
+
+    #content { display: none; }
+
     /* ── Header ───────────────────────────────────────────── */
     header {
       transition: background-color 0.3s;
@@ -519,6 +544,15 @@ function checkPass(){
 </head>
 <body>
 
+  <!-- Password gate -->
+  <div id="login">
+    <h2>Enter Password</h2>
+    <input type="password" id="pass">
+    <button onclick="checkPass()">Enter</button>
+  </div>
+
+  <div id="content">
+
   <!-- Header card -->
   <header>
     <a href="../">
@@ -729,8 +763,21 @@ function checkPass(){
     </div>
   </section>
 
+  </div>
 
   <script>
+    function checkPass(){
+      const password = "Marfita"; // change this
+      const input = document.getElementById("pass").value;
+
+      if(input === password){
+        document.getElementById("login").style.display = "none";
+        document.getElementById("content").style.display = "block";
+      } else {
+        alert("Nope!");
+      }
+    }
+
     const observer = new IntersectionObserver(
       (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); }),
       { threshold: 0.12 }
