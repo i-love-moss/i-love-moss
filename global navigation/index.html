@@ -1,1 +1,574 @@
-hold
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Raised navigational task-completion success from 28% to 71% across an 11-task usability test with nearly 270 student participants.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Caroline Padon / Global Navigation Refresh">
+<meta property="og:description" content="Raised navigational task-completion success from 28% to 71% across an 11-task usability test with nearly 270 student participants.">
+<title>Caroline Padon / Global Navigation Refresh</title>
+
+<style>
+  @font-face {
+    font-family: 'Commit Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/commit-mono@latest/latin-400-normal.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'Commit Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/commit-mono@latest/latin-500-normal.woff2) format('woff2');
+  }
+
+  :root {
+    --paper:      #FAFFFB;
+    --ink:        #007618;
+    --ink-soft:   #4C8F58;
+    --line:       rgba(0, 118, 24, 0.28);
+    --card:       #E9F4EA;
+    --accent:     #C2F90B;
+    --accent-soft:#AFE1A8;
+    --near-black: #1A1F1B;
+
+    --display: 'Commit Mono', 'IBM Plex Mono', monospace;
+    --body:    'Times New Roman', Times, serif;
+    --mono:    'Commit Mono', 'IBM Plex Mono', monospace;
+
+    --max-w: 780px;
+    --gutter: 24px;
+    scroll-behavior: smooth;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--near-black);
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+
+  .wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--ink);
+    z-index: 200;
+    transition: width 0.1s linear;
+  }
+
+  header.info-card {
+    position: fixed;
+    top: 0.5em;
+    right: 0.5em;
+    z-index: 150;
+    max-width: 92vw;
+    background-color: #fff;
+    color: #000;
+    font-size: 14px;
+    padding: 4px;
+    box-shadow: 0px 0.5px 2px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+  }
+  header.info-card a { text-decoration: none; color: inherit; }
+  header.info-card table { width: 100%; border-collapse: collapse; margin: 0; }
+  header.info-card th, header.info-card td {
+    font-weight: inherit;
+    text-align: left;
+    border: solid 1px;
+    padding: 4px 6px;
+  }
+  header.info-card tr.info td {
+    font-family: var(--mono);
+    font-size: 68%;
+    padding: 1px 6px;
+    text-transform: uppercase;
+  }
+  header.info-card:hover { background-color: var(--card); }
+
+  .hero { padding: 7.5rem 0 2.5rem; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    background: var(--card);
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  h1.hero-title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(26px, 5vw, 40px);
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 20px;
+  }
+
+  .hero-sub {
+    font-family: var(--body);
+    font-size: 19px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    background: radial-gradient(circle, var(--accent) 5%, var(--accent-soft) 55%, var(--card) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    text-align: center;
+    padding: 20px;
+  }
+
+  .overview {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 3rem 0;
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  @media (max-width: 480px) { .overview { grid-template-columns: 1fr; } }
+
+  .overview-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    transition: background-color 0.3s;
+  }
+  .overview-item:hover { background-color: var(--card); }
+  .overview-item:nth-child(2n) { border-right: none; }
+  .overview-item:nth-last-child(-n+2) { border-bottom: none; }
+
+  .overview-item .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .overview-item .value { font-size: 16px; font-weight: 500; }
+
+  section.content-block { padding: 3.2rem 0; border-top: 1px solid var(--line); }
+  section.content-block:first-of-type { border-top: none; }
+
+  h2.section-title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(22px, 3.4vw, 27px);
+    color: var(--ink);
+    margin: 0 0 18px;
+  }
+
+  h3.sub-title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 16px;
+    margin: 28px 0 8px;
+  }
+
+  section.content-block p { color: var(--near-black); margin: 0 0 16px; max-width: 66ch; }
+  section.content-block p:last-child { margin-bottom: 0; }
+
+  section.content-block ul {
+    margin: 0 0 16px 1.2em;
+    max-width: 64ch;
+  }
+  section.content-block ul li { margin-bottom: 10px; }
+  section.content-block ul li:last-child { margin-bottom: 0; }
+
+  blockquote.pull-quote {
+    margin: 28px 0;
+    padding: 4px 0 4px 22px;
+    border-left: 3px solid var(--ink);
+    font-family: var(--body);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 62ch;
+  }
+
+  figure.media-block { margin: 24px 0; }
+  figure.media-block figcaption {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+  .img-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 20px;
+  }
+
+  table.results {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+  table.results th, table.results td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+  }
+  table.results th {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: var(--card);
+  }
+  table.results tr.highlight td { background: var(--accent-soft); font-weight: 700; }
+  table.results td.num { font-family: var(--mono); font-size: 17px; }
+
+  .callout {
+    background: var(--accent);
+    border-radius: 6px;
+    padding: 22px 24px;
+    margin: 28px 0;
+  }
+  .callout p { margin: 0 0 12px 0; color: var(--near-black); max-width: 66ch; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 5px 10px;
+    border-radius: 999px;
+    color: var(--ink-soft);
+  }
+
+  .stat-arrow-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .stat-number {
+    font-family: var(--mono);
+    font-size: clamp(34px, 6vw, 52px);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1;
+    border-bottom: 6px solid var(--accent);
+    display: inline-block;
+  }
+  .stat-arrow-row .arrow { font-family: var(--mono); font-size: 26px; color: var(--ink-soft); }
+
+  .next-project {
+    border-top: 1px solid var(--ink);
+    padding: 40px 0 56px;
+    margin-top: 16px;
+  }
+  .next-project .label {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .next-project a {
+    font-family: var(--display);
+    font-size: 22px;
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--ink);
+    color: var(--ink);
+  }
+
+  footer.site-footer {
+    padding: 24px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  footer.site-footer a { text-decoration: underline; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-in {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header class="info-card">
+  <a href="../">
+    <table>
+      <thead><tr><th colspan="3">Caroline Padon</th></tr></thead>
+      <tbody>
+        <tr class="info">
+          <td>Project Name</td><td>Role</td><td>Year</td>
+        </tr>
+        <tr>
+          <td>Global Navigation Refresh</td>
+          <td>UX Designer, Researcher & PO</td>
+          <td>2024–2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </a>
+</header>
+
+<div class="wrap" id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="eyebrow">Case Study</span>
+    <h1 class="hero-title">Global Navigation Refresh: Rebuilding Findability for One of the Nation's Largest Academic Library Systems</h1>
+    <p class="hero-sub">Raised navigational task-completion success from 28% to 71% across an 11-task usability test with nearly 270 student participants.</p>
+    <div class="hero-image">
+      [ Hero image ]
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="overview fade-in">
+    <div class="overview-item">
+      <div class="label">Role</div>
+      <div class="value">UX Designer, UX Researcher & Product Owner</div>
+    </div>
+    <div class="overview-item">
+      <div class="label">Organization</div>
+      <div class="value">University of Texas Libraries</div>
+    </div>
+    <div class="overview-item">
+      <div class="label">Timeline</div>
+      <div class="value">July 2024 – May 2025</div>
+    </div>
+    <div class="overview-item">
+      <div class="label">Team</div>
+      <div class="value">1 UX Designer/Researcher (me), 1 software engineer, 7 cross-departmental stakeholder group</div>
+    </div>
+    <div class="overview-item">
+      <div class="label">Tools</div>
+      <div class="value">Figma, FigJam, Optimal Workshop, Microsoft Clarity</div>
+    </div>
+    <div class="overview-item">
+      <div class="label">Platform</div>
+      <div class="value">Drupal (responsive web)</div>
+    </div>
+  </section>
+
+  <!-- OPPORTUNITY -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Navigating a dense enterprise academic library website</h2>
+    <p>UT Libraries is one of the largest academic libraries in the US, serving a population of 55,000+, with six library branches and a diverse range of services to offer our students. Libraries are also a specialized place, with a lot of  jargon. Our legacy site had menus that were bloated, overwhelming, and had too many terms users did not understand.</p>
+
+    <blockquote class="pull-quote">
+      The opportunity: How might we restructure UT Libraries' global navigation so that anyone, regardless of their familiarity with library terminology can find what they need on the first try?
+    </blockquote>
+
+    <figure class="media-block">
+      <div class="img-placeholder">[ image ]</div>
+    </figure>
+  </section>
+
+  <!-- RESEARCH & STRATEGIC FOUNDATION -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Research & Strategic Foundation</h2>
+    <p>Before touching the design, I ran a comparative analysis of peer institutions, existing industry research, and completed a total navigational audit of the existing site.</p>
+    <p>After running a baseline tree test, our task success rate was just 28%.</p>
+    <p>That audit surfaced a pattern echoed across academic libraries everywhere: navigation optimized for internal departments rather than external mental models. Terms like "Public Services" and "Access Services" made sense to library staff. They meant nothing to a sophomore trying to figure out how to locate a primary source.</p>
+    <p>Using those findings, I built two competing information architectures for the global navigation, restructured around user-facing tasks rather than internal org units, and moved into validation.</p>
+  </section>
+
+  <!-- VALIDATION -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Validating the Architecture: Tree Testing at Scale</h2>
+    <p>Rather than rely on internal consensus about which structure made more sense, I designed and ran two rounds of unmoderated tree testing through Optimal Workshop, recruiting participants through the campus-wide user survey and the live website.</p>
+    <p>~270 participants completed the same 11 real-world tasks against each candidate structure, everything from "find a digital scan of a 1952 map for a class" to "figure out how long you can check out a book," compared directly against the existing site's structure as a baseline.</p>
+
+    <table class="results">
+      <thead>
+        <tr><th>Structure</th><th>Overall Success Rate</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Existing navigation (baseline)</td><td class="num">28%</td></tr>
+        <tr class="highlight"><td>Version 1 (selected)</td><td class="num">71%</td></tr>
+        <tr><td>Version 2</td><td class="num">60%</td></tr>
+      </tbody>
+    </table>
+
+    <p>Both candidate structures more than doubled findability against the baseline. Version 1 won out and became the foundation for the new global navigation.</p>
+    <p>A few standout results shaped the final structure:</p>
+    <ul>
+      <li>The new "Visit Us" grouping performed exceptionally well. Users understood that hours, locations, and even printing and technology support lived there, a category that hadn't existed in the old navigation.</li>
+      <li>"Research Help" saw some of the largest score improvements of any section, confirming that regrouping research-support content under clearer, task-based labels made a measurable difference.</li>
+      <li>Not everything was resolved on the first pass: participants still confused "Locations" and "Library Spaces" as near-duplicate categories, a nuance that shaped copy and hierarchy decisions in the next design round.</li>
+    </ul>
+  </section>
+
+  <!-- SCRAPPY RESEARCH -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Getting Scrappy With Research</h2>
+    <p>Not every research method landed cleanly. Early in the process, we tried collecting lightweight, in-the-moment feedback on proposed feature groupings using whiteboards, stickers, and sticky notes placed around a busy library floor. It felt too obvious not to try, with a low barrier to entry, and potential for validation without much risk. In practice, we ended up with a lot of missing post it notes, stickers, and pens.</p>
+
+    <div class="callout">
+      <p>After some alterations to the white board method (mainly a note saying that if you stole the post it's you would make a librarian cry) we were able to get significant responses from our users.</p>
+    </div>
+
+    <p>The successful whiteboard exercises gave us a directional signal and helped us frame better hypotheses, but the real validation came from structured, statistically meaningful tree testing at scale. Knowing when a lightweight method has told you what it can, and when it's time to bring in a rigorous instrument instead, was one of the more valuable calls I made on this project.</p>
+  </section>
+
+  <!-- STRUCTURE -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">From Research to Structure</h2>
+    <p>The validated architecture reorganized the entire global navigation around four primary categories, each grounded in what the tree test data proved people were actually looking for:</p>
+
+    <ul>
+      <li>Find, Borrow, Request — consolidating catalog search, digital collections, and circulation into one predictable path</li>
+      <li>Study Spaces & Technology — merging room booking, equipment checkout, and technology support</li>
+      <li>Research Support — distinguishing research help from publishing and open education services, two areas users had previously conflated</li>
+      <li>About — streamlined down to institutional information, with visitor-facing content like hours, accessibility, and events relocated into "Visit Us" based directly on what the tree test confirmed people expected</li>
+    </ul>
+
+    <h3 class="sub-title">Intermediary Pages</h3>
+    <ul>
+      <li>We complied similar items into new landing pages to give more space for context and explanation</li>
+      <li>Gives users a new way to interact with more specialized items or names that require a bit of context for new users</li>
+      <li>There will be 6 new intermediary pages</li>
+    </ul>
+    <div class="chip-row">
+      <span class="chip">Browse Collections</span>
+      <span class="chip">Support for Instructors</span>
+      <span class="chip">Research Basics</span>
+      <span class="chip">Publishing and Research Services</span>
+      <span class="chip">Library Spaces</span>
+      <span class="chip">Library Staff and Administration</span>
+    </div>
+  </section>
+
+  <!-- HANDOFF & CONSTRAINTS -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Handoff & Real-World Constraints</h2>
+    <p>Design decisions don't ship in a vacuum, and this one didn't either. The rebuild moved through a compressed internal timeline (two allocated developer FTEs for a six-month window), required close coordination with the library's IT development team, and had to account for organizational changes happening in parallel: two branch libraries were consolidating and a third was closing during the same window the site was being rebuilt. I worked directly with the dev team to sequence which changes needed to land before launch and which could follow once those institutional changes were finalized, so the new navigation wouldn't need to be re-architected weeks after going live.</p>
+    <p>The new global navigation launched alongside the full homepage refresh in May 2025.</p>
+  </section>
+
+  <!-- RESULTS & IMPACT -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Results & Impact</h2>
+
+    <div class="stat-arrow-row">
+      <span class="stat-number">28%</span>
+      <span class="arrow">→</span>
+      <span class="stat-number">71%</span>
+    </div>
+
+    <ul style="margin-top: 20px;">
+      <li>28% → 71% findability success rate, validated across nearly 270 real user sessions</li>
+      <li>A navigation structure now organized around what people are trying to do, not how the library is internally organized</li>
+      <li>A repeatable, low-cost research methodology (tree testing via Optimal Workshop, recruited through existing campus channels) that other resource-constrained institutions can adopt without a large research budget</li>
+    </ul>
+  </section>
+
+  <!-- KEY LEARNINGS -->
+  <section class="content-block fade-in">
+    <h2 class="section-title">Key Learnings</h2>
+    <p><strong>Analysis paralysis in big navigational menus.</strong> When you make navigation menus too big, with too many choices, users felt paralyzed and overwhelmed by all of the options, compounded by the library terms they didn't understand. Creating high level categories helps funnel users to the right place by making these choices easier.</p>
+    <p><strong>Prioritize the data over the org chart.</strong> There is always an instinct to organize navigation around departments in any large institution. The data made an evidence-based case for user-first categories instead, and gave the project the credibility it needed to get buy-in.</p>
+    <p><strong>Ship inside real institutional constraints, not around them.</strong> Branch consolidations, closures, and a hard developer timeline were important to pivot to include in the moment. Pushing them down the line runs the risk for a second iteration being needed earlier.</p>
+    <p><strong>Findability work is accessibility work.</strong> For a public institution serving a huge range of technical fluency and prior library experience, a confusing navigation can act as a barrier to public resources.</p>
+  </section>
+
+  <!-- NEXT PROJECT -->
+  <div class="next-project">
+    <div class="label">Next Project</div>
+    <a href="../way finding">Wayfinding in UTL's Main Library →</a>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%;">
+    <span>Caroline Padon</span>
+    <a href="../">Back to work</a>
+  </div>
+</footer>
+
+<script>
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.12 }
+  );
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
